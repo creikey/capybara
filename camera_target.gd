@@ -13,7 +13,7 @@ func _input(event: InputEvent):
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event is InputEventMouseMotion:
 		$Horizontal.rotation.y -= event.relative.x * 0.005
 		$Horizontal/Vertical.rotation.x -= event.relative.y * 0.005
-		$Horizontal/Vertical.rotation.x = clamp($Horizontal/Vertical.rotation.x, -PI*0.45, PI*0.05)
+		$Horizontal/Vertical.rotation.x = clamp($Horizontal/Vertical.rotation.x, -PI*0.45, PI*0.15)
 	
 	if event.is_action_pressed("focus"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
