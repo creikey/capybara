@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=3 uid="uid://cv1wpgejk6mn4"]
+
+[ext_resource type="Script" path="res://capybara.gd" id="1_7dwfw"]
+[ext_resource type="PackedScene" uid="uid://bjujpov27xm24" path="res://capybara.glb" id="2_6pcjo"]
+[ext_resource type="Script" path="res://camera_target.gd" id="3_r1obh"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_n4vk0"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_idy2r"]
+
+[sub_resource type="Sky" id="Sky_qksmh"]
+sky_material = SubResource("ProceduralSkyMaterial_idy2r")
+
+[sub_resource type="Environment" id="Environment_dadlk"]
+background_mode = 2
+sky = SubResource("Sky_qksmh")
+
+[node name="main" type="Node3D"]
+
+[node name="Capybara" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_horizontal_angle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36397, 0)
+script = ExtResource("1_7dwfw")
+camera_horizontal_angle = NodePath("../CameraTarget/Horizontal")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Capybara"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("SphereShape3D_n4vk0")
+
+[node name="capybara" parent="Capybara" instance=ExtResource("2_6pcjo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.53135, 0)
+
+[node name="CameraTarget" type="Node3D" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("3_r1obh")
+player = NodePath("../Capybara")
+
+[node name="Horizontal" type="Node3D" parent="CameraTarget"]
+
+[node name="Vertical" type="Node3D" parent="CameraTarget/Horizontal"]
+
+[node name="Camera3D" type="Camera3D" parent="CameraTarget/Horizontal/Vertical"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.56945)
+current = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dadlk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.727593, 0.564883, -0.38925, 0, 0.567413, 0.823434, 0.686009, -0.599125, 0.412846, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+size = Vector3(19, 1, 12)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 4.47139, -1, 0)
+size = Vector3(19, 1, 12)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -0.52861, -1, -6)
+size = Vector3(19, 1, 12)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1.06581e-14, 1, 4.37114e-08, -1, -1.06581e-14, 1.91069e-15, -0.52861, 4.3937, -6)
+size = Vector3(19, 1, 12)
