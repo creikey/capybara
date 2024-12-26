@@ -1,13 +1,13 @@
 extends CharacterBody3D
 
-@onready var anim: AnimationPlayer = $capybara/AnimationPlayer
+@onready var anim: AnimationPlayer = $visual/capybara/AnimationPlayer
 
-const SPEED = 13.0
+const SPEED = 7.0
 const JUMP_VELOCITY = 13.0
 
 @export var camera_horizontal_angle: Node3D
 
-@onready var visual = $capybara
+@onready var visual = $visual
 var high_jumping = false
 var target_basis = Basis()
 var was_just_on_wall = false
@@ -21,7 +21,7 @@ func _ready():
 	anim.playback_default_blend_time = 0.5
 
 func _process(delta: float) -> void:
-	visual.global_basis = lerp(visual.global_basis, target_visual_basis, delta * 9.0)
+	visual.global_basis = lerp(visual.global_basis.orthonormalized(), target_visual_basis, delta * 9.0).orthonormalized()
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.

@@ -1,12 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://cv1wpgejk6mn4"]
+[gd_scene load_steps=12 format=3 uid="uid://cv1wpgejk6mn4"]
 
 [ext_resource type="Script" path="res://capybara.gd" id="1_7dwfw"]
 [ext_resource type="PackedScene" uid="uid://bjujpov27xm24" path="res://capybara.glb" id="2_6pcjo"]
 [ext_resource type="Script" path="res://camera_target.gd" id="3_r1obh"]
 [ext_resource type="Texture2D" uid="uid://bi4ljv34t74w7" path="res://Reticle.png" id="4_4y3t4"]
 [ext_resource type="Texture2D" uid="uid://305g07cgiynw" path="res://Marble012_1K-PNG_Color.png" id="4_c3jkw"]
+[ext_resource type="PackedScene" uid="uid://duf4oy5m5lkvx" path="res://man.tscn" id="6_v2dgi"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_n4vk0"]
+radius = 0.28
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_idy2r"]
 
@@ -25,17 +27,19 @@ uv1_world_triplanar = true
 
 [node name="main" type="Node3D"]
 
-[node name="Capybara" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_horizontal_angle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36397, 0)
+[node name="Capybara" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_horizontal_angle") groups=["man_targets"]]
+collision_layer = 2
 script = ExtResource("1_7dwfw")
 camera_horizontal_angle = NodePath("../CameraTarget/Horizontal")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Capybara"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.312687, 0)
 shape = SubResource("SphereShape3D_n4vk0")
 
-[node name="capybara" parent="Capybara" instance=ExtResource("2_6pcjo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.53135, 0)
+[node name="visual" type="Node3D" parent="Capybara"]
+
+[node name="capybara" parent="Capybara/visual" instance=ExtResource("2_6pcjo")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.00563914, 0)
 
 [node name="CameraTarget" type="Node3D" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("3_r1obh")
@@ -104,3 +108,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_4y3t4")
 expand_mode = 1
+
+[node name="Man" parent="." instance=ExtResource("6_v2dgi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.964693, 0, 4.53345)

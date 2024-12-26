@@ -3,3 +3,13 @@
 Reticle.png filter=lfs diff=lfs merge=lfs -text
 capybara_texture_diffuse.png filter=lfs diff=lfs merge=lfs -text
 capybara.glb filter=lfs diff=lfs merge=lfs -text
+Marble012_1K-PNG_Color.png filter=lfs diff=lfs merge=lfs -text
+man_Ch33_1001_Diffuse.png filter=lfs diff=lfs merge=lfs -text
+man_Ch33_1001_Specular.png filter=lfs diff=lfs merge=lfs -text
+man.glb filter=lfs diff=lfs merge=lfs -text
+man_Ch33_1001_Glossiness.png filter=lfs diff=lfs merge=lfs -text
+man_Ch33_1001_Normal.png filter=lfs diff=lfs merge=lfs -text
+man_Ch33_1002_Diffuse.png filter=lfs diff=lfs merge=lfs -text
+man_Ch33_1002_Normal.png filter=lfs diff=lfs merge=lfs -text
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
