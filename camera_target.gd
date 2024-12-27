@@ -15,6 +15,12 @@ func _input(event: InputEvent):
 		$Horizontal/Vertical.rotation.x -= event.relative.y * 0.005
 		$Horizontal/Vertical.rotation.x = clamp($Horizontal/Vertical.rotation.x, -PI*0.45, PI*0.15)
 	
+	if event.is_action_pressed("restart"):
+		get_tree().paused = false
+		get_tree().reload_current_scene()
+		Engine.time_scale = 1.0
+
+	
 	if event.is_action_pressed("focus"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if event.is_action_pressed("escape_mouse"):

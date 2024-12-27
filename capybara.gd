@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+class_name Capybara
+
 @onready var anim: AnimationPlayer = $visual/capybara/AnimationPlayer
 
 const SPEED = 7.0
@@ -16,12 +18,20 @@ var target_visual_basis = Basis(
 	Vector3(0,1,0),
 	Vector3(1,0,0),
 )
+var killed = false
 
 func _ready():
 	anim.playback_default_blend_time = 0.5
 
 func _process(delta: float) -> void:
+	if killed:
+		Engine.time_scale = lerp(Engine.time_scale, 0.05, (delta / Engine.time_scale) * 5.0)
+		if Engine.time_scale < 0.1:
+			get_tree().paused = true
 	visual.global_basis = lerp(visual.global_basis.orthonormalized(), target_visual_basis, delta * 9.0).orthonormalized()
+
+func kill():
+	killed = true
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.

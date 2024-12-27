@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://cv1wpgejk6mn4"]
+[gd_scene load_steps=13 format=3 uid="uid://cv1wpgejk6mn4"]
 
 [ext_resource type="Script" path="res://capybara.gd" id="1_7dwfw"]
 [ext_resource type="PackedScene" uid="uid://bjujpov27xm24" path="res://capybara.glb" id="2_6pcjo"]
 [ext_resource type="Script" path="res://camera_target.gd" id="3_r1obh"]
 [ext_resource type="Texture2D" uid="uid://bi4ljv34t74w7" path="res://Reticle.png" id="4_4y3t4"]
 [ext_resource type="Texture2D" uid="uid://305g07cgiynw" path="res://Marble012_1K-PNG_Color.png" id="4_c3jkw"]
+[ext_resource type="Script" path="res://death_instructions.gd" id="6_leu4n"]
 [ext_resource type="PackedScene" uid="uid://duf4oy5m5lkvx" path="res://man.tscn" id="6_v2dgi"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_n4vk0"]
@@ -42,6 +43,7 @@ shape = SubResource("SphereShape3D_n4vk0")
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.00563914, 0)
 
 [node name="CameraTarget" type="Node3D" parent="." node_paths=PackedStringArray("player")]
+process_mode = 3
 script = ExtResource("3_r1obh")
 player = NodePath("../Capybara")
 
@@ -76,10 +78,6 @@ size = Vector3(19, 1, 12)
 transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -0.52861, -1, -6)
 size = Vector3(19, 1, 12)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1.06581e-14, 1, 4.37114e-08, -1, -1.06581e-14, 1.91069e-15, -0.52861, 4.3937, -6)
-size = Vector3(19, 1, 12)
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
@@ -92,7 +90,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control"]
+[node name="Reticle" type="TextureRect" parent="CanvasLayer/Control"]
 modulate = Color(1, 1, 1, 0.431373)
 layout_mode = 1
 anchors_preset = 8
@@ -101,13 +99,47 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -12.0
-offset_top = -12.0
+offset_top = -114.99
 offset_right = 12.0
-offset_bottom = 12.0
+offset_bottom = -90.99
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_4y3t4")
 expand_mode = 1
+
+[node name="DeathInstructions" type="ColorRect" parent="CanvasLayer/Control" node_paths=PackedStringArray("capybara")]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -194.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+script = ExtResource("6_leu4n")
+capybara = NodePath("../../../Capybara")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/DeathInstructions"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -74.5
+offset_top = -24.5
+offset_right = 74.5
+offset_bottom = 24.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+pivot_offset = Vector2(74, 24)
+text = "It's not enough...
+Press R to try again"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Man" parent="." instance=ExtResource("6_v2dgi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.964693, 0, 4.53345)

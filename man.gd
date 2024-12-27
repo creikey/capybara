@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @onready var tree: AnimationTree = $AnimationTree
 
-const SPEED = 5.0
+const SPEED = 10.0
 const JUMP_VELOCITY = 4.5
 
 var target: Node3D = null
@@ -25,8 +25,21 @@ func _physics_process(delta: float) -> void:
 
 		var input := Vector3()
 		
-		if target != null and (target.global_position - global_position).length() > 1.0:
-			input = (target.global_position - global_position)
+		if target != null:
+			if (target.global_position - global_position).length() > 1.5:
+				input = (target.global_position - global_position)
+				tree.set("parameters/conditions/kick", false)
+				$man/MeshInstance3D.visible = false
+				$man/Kill/CollisionShape3D.disabled = true
+			else:
+				tree.set("parameters/conditions/kick", true)
+				var playback = (tree.get("parameters/playback") as AnimationNodeStateMachinePlayback)
+				#print(playback.get_current_node())
+				var do_kill = playback.get_current_node() == "Kick" and playback.get_current_play_position() > 0.1
+				$man/Kill/CollisionShape3D.disabled = not (do_kill)
+				$man/MeshInstance3D.visible = do_kill
+		
+		#print((tree.get("parameters/playback") as AnimationNodeStateMachinePlayback).get_current_play_position())
 		
 		input.y = 0.0
 		if input.length_squared() > 0:
@@ -47,3 +60,8 @@ func _physics_process(delta: float) -> void:
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body.is_in_group("man_targets"):
 		target = body
+
+
+func _on_kill_body_entered(body: Node3D) -> void:
+	if body.is_in_group("man_targets"):
+		body.kill()
