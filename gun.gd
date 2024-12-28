@@ -12,10 +12,10 @@ var hovering = false
 var time_thrown = 0.0
 var thrown_by: PhysicsBody3D = null
 
-func throw(thrown_by: PhysicsBody3D, target: Vector3, oomf: float):
+func throw(new_thrown_by: PhysicsBody3D, target: Vector3, oomf: float):
 	picked_up_by = null
-	self.thrown_by = thrown_by
-	add_collision_exception_with(thrown_by)
+	thrown_by = new_thrown_by
+	add_collision_exception_with(new_thrown_by)
 	state = State.THROWN
 	time_thrown = 0.0
 	velocity = (target - global_position).normalized() * oomf
@@ -24,7 +24,7 @@ func pick_up(new_owner: Node3D):
 	state = State.HELD
 	picked_up_by = new_owner
 
-func fire(target: Vector3):
+func fire(_target: Vector3):
 	pass
 
 func _physics_process(delta: float) -> void:

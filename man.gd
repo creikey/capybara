@@ -16,6 +16,7 @@ func kill(_origin: Vector3, _kill_direction: Vector3):
 	$CollisionShape3D.disabled = true
 	$man/Skeleton3D/PhysicalBoneSimulator3D.active = true
 	$man/Skeleton3D/PhysicalBoneSimulator3D.physical_bones_start_simulation()
+	
 
 func _physics_process(delta: float) -> void:
 	if not killed:

@@ -5,5 +5,5 @@ extends SubViewport
 func _ready():
 	world_3d = get_window().world_3d
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$Camera3D.global_transform = scene_camera.global_transform
