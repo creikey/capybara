@@ -7,7 +7,10 @@ class_name Capybara
 const SPEED = 7.0
 const JUMP_VELOCITY = 13.0
 
+@export var reticle: TextureRect
+@export var camera: Camera3D
 @export var camera_horizontal_angle: Node3D
+@export var holding_point: Node3D
 
 @onready var visual = $visual
 var high_jumping = false
@@ -19,6 +22,8 @@ var target_visual_basis = Basis(
 	Vector3(1,0,0),
 )
 var killed = false
+var holding: Node3D = null
+@onready var tool_target: Vector3 = global_position + -global_transform.basis.z*100.0
 
 func _ready():
 	anim.playback_default_blend_time = 0.5
@@ -30,7 +35,29 @@ func _process(delta: float) -> void:
 			get_tree().paused = true
 	visual.global_basis = lerp(visual.global_basis.orthonormalized(), target_visual_basis, delta * 9.0).orthonormalized()
 
-func kill():
+	for t in get_tree().get_nodes_in_group("tools"):
+		t.hovering = false
+	var closest = null
+	var closest_dist = INF
+	for t in $PickupArea.get_overlapping_bodies():
+		if not t.is_in_group("tools"): continue
+		if t.picked_up_by != null: continue
+		var d = (t.global_position - global_position).length()
+		if d < closest_dist:
+			closest_dist = d
+			closest = t
+	if closest:
+		closest.hovering = true
+	if Input.is_action_just_pressed("tool_throw_and_pick_up"):
+		if holding != null:
+			holding.global_position = $visual/ThrowSpot.global_position
+			holding.throw(self, tool_target, 25.0)
+			holding = null
+		if closest:
+			closest.pick_up(holding_point)
+			holding = closest
+
+func kill(_origin: Vector3, _kill_direction: Vector3):
 	killed = true
 
 func _physics_process(delta: float) -> void:
@@ -42,9 +69,8 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity += JUMP_VELOCITY * -up_direction * -1
 		high_jumping = true
-	if Input.is_action_just_released("jump"):
+	if Input.is_action_just_released("jump") or velocity.y < 0.0:
 		high_jumping = false
-
 
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var flattened_forward = -target_basis.z.rotated(up_direction, camera_horizontal_angle.rotation.y)
@@ -86,6 +112,18 @@ func _physics_process(delta: float) -> void:
 	if not is_on_wall(): was_just_on_wall = false
 
 	global_transform.basis = lerp(global_transform.basis, target_basis, 9.0 * delta)
+
+	var screen_point = reticle.position + reticle.size / 2.0
+	var origin = camera.project_ray_origin(screen_point)
+	var end = origin + camera.project_ray_normal(screen_point)*1000.0
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	var result = space_state.intersect_ray(query)
+	tool_target = end 
+	if not result.is_empty():
+		tool_target = result["position"]
+	
+	holding_point.look_at(tool_target,  up_direction)
 
 func snap_to_cardinal_direction(v: Vector3) -> Vector3:
 	v = v.normalized()

@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctkk6n0paxd0c"]
+
+[ext_resource type="Script" path="res://capybara.gd" id="1_g0d62"]
+[ext_resource type="PackedScene" uid="uid://bjujpov27xm24" path="res://capybara.glb" id="2_jbg8t"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_n4vk0"]
+radius = 0.28
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7vlp5"]
+radius = 1.12809
+
+[node name="Capybara" type="CharacterBody3D" node_paths=PackedStringArray("holding_point") groups=["killable", "man_targets"]]
+collision_layer = 2
+script = ExtResource("1_g0d62")
+holding_point = NodePath("visual/capybara/Armature/Skeleton3D/HeadAttachment/HoldingBase")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.312687, 0)
+shape = SubResource("SphereShape3D_n4vk0")
+
+[node name="visual" type="Node3D" parent="."]
+
+[node name="capybara" parent="visual" instance=ExtResource("2_jbg8t")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.00563914, 0)
+
+[node name="Skeleton3D" parent="visual/capybara/Armature" index="0"]
+bones/0/position = Vector3(2.24321e-13, 0.670937, -0.948099)
+bones/0/rotation = Quaternion(0.648292, -6.35355e-07, -5.40978e-07, 0.761392)
+bones/3/rotation = Quaternion(-0.06026, 0.0223133, -0.00763556, 0.997904)
+bones/4/rotation = Quaternion(0.0353985, -0.0153344, 0.0044681, 0.999246)
+bones/5/rotation = Quaternion(0.631437, -0.0210995, 0.260699, 0.729985)
+bones/6/rotation = Quaternion(0.0950082, -0.154907, -0.229319, 0.956237)
+bones/7/rotation = Quaternion(-0.494979, 0.0528009, -0.0259738, 0.86691)
+bones/8/rotation = Quaternion(0.652927, 0.0424735, -0.252872, 0.712698)
+bones/9/rotation = Quaternion(0.0972721, 0.00459888, 0.244367, 0.964781)
+bones/10/rotation = Quaternion(-0.5853, 0.173823, 0.017173, 0.791779)
+bones/12/rotation = Quaternion(0.760672, 0.0763822, -0.279376, 0.580942)
+bones/13/rotation = Quaternion(-0.0843668, 0.0168773, 0.139053, 0.98654)
+bones/14/rotation = Quaternion(0.0214027, 0.0411159, 0.507145, 0.860613)
+bones/16/rotation = Quaternion(0.722845, -0.0439621, 0.255952, 0.640352)
+bones/17/rotation = Quaternion(-0.00337682, -0.00827483, -0.170142, 0.985379)
+bones/18/rotation = Quaternion(0.0338107, 0.0619141, -0.452682, 0.888877)
+
+[node name="HeadAttachment" type="BoneAttachment3D" parent="visual/capybara/Armature/Skeleton3D" index="1"]
+transform = Transform3D(0.999884, 0.00572345, 0.0141303, 0.0133242, 0.122342, -0.992399, -0.00740867, 0.992471, 0.122251, 0.00403421, 0.863397, 0.394183)
+bone_name = "Bone.004"
+bone_idx = 4
+
+[node name="HoldingBase" type="Node3D" parent="visual/capybara/Armature/Skeleton3D/HeadAttachment"]
+transform = Transform3D(0.999386, 0.0140484, 0.0321081, -0.0108451, 0.995142, -0.097849, -0.0333267, 0.0974406, 0.994683, 0.00622225, 0.392828, 0.141708)
+
+[node name="ThrowSpot" type="Node3D" parent="visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.527822, 0.729782)
+
+[node name="PickupArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PickupArea"]
+shape = SubResource("SphereShape3D_7vlp5")
+
+[editable path="visual/capybara"]

@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://via2hlwnxblf"
+path.s3tc="res://.godot/imported/gun_MAK_381_M_Pistolet_Vis_normal_map_v2.png-a9f4a578372489eb2f85b657d9915624.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "4b7f20a334b9b46d462894e3ee2188ca"
+}
+
+[deps]
+
+source_file="res://gun_MAK_381_M_Pistolet_Vis_normal_map_v2.png"
+dest_files=["res://.godot/imported/gun_MAK_381_M_Pistolet_Vis_normal_map_v2.png-a9f4a578372489eb2f85b657d9915624.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://gun_MAK_381_M_Pistolet_Vis_normal_map_v2.png"
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

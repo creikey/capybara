@@ -1,15 +1,24 @@
-[gd_scene load_steps=13 format=3 uid="uid://cv1wpgejk6mn4"]
+[gd_scene load_steps=15 format=3 uid="uid://cv1wpgejk6mn4"]
 
-[ext_resource type="Script" path="res://capybara.gd" id="1_7dwfw"]
-[ext_resource type="PackedScene" uid="uid://bjujpov27xm24" path="res://capybara.glb" id="2_6pcjo"]
+[ext_resource type="PackedScene" uid="uid://ctkk6n0paxd0c" path="res://capybara.tscn" id="1_kf77b"]
 [ext_resource type="Script" path="res://camera_target.gd" id="3_r1obh"]
 [ext_resource type="Texture2D" uid="uid://bi4ljv34t74w7" path="res://Reticle.png" id="4_4y3t4"]
 [ext_resource type="Texture2D" uid="uid://305g07cgiynw" path="res://Marble012_1K-PNG_Color.png" id="4_c3jkw"]
+[ext_resource type="Shader" path="res://outline.gdshader" id="5_48nep"]
+[ext_resource type="Script" path="res://outline_viewport.gd" id="5_ebo3u"]
 [ext_resource type="Script" path="res://death_instructions.gd" id="6_leu4n"]
 [ext_resource type="PackedScene" uid="uid://duf4oy5m5lkvx" path="res://man.tscn" id="6_v2dgi"]
+[ext_resource type="PackedScene" uid="uid://ci02rsa8p7alq" path="res://gun.tscn" id="7_yomqh"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_n4vk0"]
-radius = 0.28
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ct1rm"]
+shader = ExtResource("5_48nep")
+shader_parameter/width = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fxocd"]
+albedo_texture = ExtResource("4_c3jkw")
+uv1_scale = Vector3(0.25, 0.25, 0.25)
+uv1_triplanar = true
+uv1_world_triplanar = true
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_idy2r"]
 
@@ -20,27 +29,12 @@ sky_material = SubResource("ProceduralSkyMaterial_idy2r")
 background_mode = 2
 sky = SubResource("Sky_qksmh")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fxocd"]
-albedo_texture = ExtResource("4_c3jkw")
-uv1_scale = Vector3(0.25, 0.25, 0.25)
-uv1_triplanar = true
-uv1_world_triplanar = true
-
 [node name="main" type="Node3D"]
 
-[node name="Capybara" type="CharacterBody3D" parent="." node_paths=PackedStringArray("camera_horizontal_angle") groups=["man_targets"]]
-collision_layer = 2
-script = ExtResource("1_7dwfw")
+[node name="Capybara" parent="." node_paths=PackedStringArray("reticle", "camera", "camera_horizontal_angle") instance=ExtResource("1_kf77b")]
+reticle = NodePath("../CanvasLayer/Control/Reticle")
+camera = NodePath("../CameraTarget/Horizontal/Vertical/Camera3D")
 camera_horizontal_angle = NodePath("../CameraTarget/Horizontal")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Capybara"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.312687, 0)
-shape = SubResource("SphereShape3D_n4vk0")
-
-[node name="visual" type="Node3D" parent="Capybara"]
-
-[node name="capybara" parent="Capybara/visual" instance=ExtResource("2_6pcjo")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.00563914, 0)
 
 [node name="CameraTarget" type="Node3D" parent="." node_paths=PackedStringArray("player")]
 process_mode = 3
@@ -54,29 +48,6 @@ player = NodePath("../Capybara")
 [node name="Camera3D" type="Camera3D" parent="CameraTarget/Horizontal/Vertical"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.56945)
 current = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_dadlk")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.727593, 0.564883, -0.38925, 0, 0.567413, 0.823434, 0.686009, -0.599125, 0.412846, 0, 0, 0)
-shadow_enabled = true
-
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
-material_override = SubResource("StandardMaterial3D_fxocd")
-use_collision = true
-
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00852966, -1.01225, 10.6707)
-size = Vector3(19, 1, 33.3604)
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 4.47139, -1, 0)
-size = Vector3(19, 1, 12)
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -0.52861, -1, -6)
-size = Vector3(19, 1, 12)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -141,5 +112,56 @@ Press R to try again"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Man" parent="." instance=ExtResource("6_v2dgi")]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer/Control"]
+material = SubResource("ShaderMaterial_ct1rm")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="OutlineViewport" type="SubViewport" parent="CanvasLayer/Control/SubViewportContainer" node_paths=PackedStringArray("scene_camera")]
+process_mode = 3
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1500, 900)
+render_target_update_mode = 4
+script = ExtResource("5_ebo3u")
+scene_camera = NodePath("../../../../CameraTarget/Horizontal/Vertical/Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="CanvasLayer/Control/SubViewportContainer/OutlineViewport"]
+transform = Transform3D(0.27998, 0, 0.960006, 0, 1, 0, -0.960006, 0, 0.27998, 0, 0, 3.82425)
+cull_mask = 2
+
+[node name="Level" type="Node3D" parent="."]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Level"]
+material_override = SubResource("StandardMaterial3D_fxocd")
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Level/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00852966, -1.01225, 10.6707)
+size = Vector3(19, 1, 33.3604)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Level/CSGCombiner3D"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 4.47139, -1, 0)
+size = Vector3(19, 1, 12)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Level/CSGCombiner3D"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, -0.52861, -1, -6)
+size = Vector3(19, 1, 12)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Level"]
+environment = SubResource("Environment_dadlk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Level"]
+transform = Transform3D(0.727593, 0.564883, -0.38925, 0, 0.567413, 0.823434, 0.686009, -0.599125, 0.412845, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Man" parent="Level" instance=ExtResource("6_v2dgi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.964693, 0, 4.53345)
+
+[node name="Gun" parent="Level" instance=ExtResource("7_yomqh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.57766, -0.427485, 3.03299)

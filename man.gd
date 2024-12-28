@@ -10,7 +10,7 @@ var target_rot = 0.0
 
 var killed = false
 
-func kill():
+func kill(_origin: Vector3, _kill_direction: Vector3):
 	killed = true
 	tree.active = false
 	$CollisionShape3D.disabled = true
@@ -39,8 +39,7 @@ func _physics_process(delta: float) -> void:
 				$man/Kill/CollisionShape3D.disabled = not (do_kill)
 				$man/MeshInstance3D.visible = do_kill
 		
-		#print((tree.get("parameters/playback") as AnimationNodeStateMachinePlayback).get_current_play_position())
-		
+
 		input.y = 0.0
 		if input.length_squared() > 0:
 			input = input.normalized()
@@ -63,5 +62,5 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_kill_body_entered(body: Node3D) -> void:
-	if body.is_in_group("man_targets"):
-		body.kill()
+	if body.is_in_group("killable"):
+		body.kill(global_position, -global_transform.basis.z)
